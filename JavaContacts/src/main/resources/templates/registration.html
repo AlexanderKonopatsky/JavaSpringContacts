@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+</head>
+<body>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+
+<div class="container">
+    <h1>Registration:</h1>
+    <form th:action="@{/registration}" th:object="${userForm}" method="post">
+        <br><div><label> User Name : <input placeholder="Enter username" type="text" th:field="*{username}" name="username"/> </label></div> <br>
+        <div><label> Password: <input placeholder="Enter password" type="password" th:field="*{password}" name="password"/> </label></div> <br>
+        <div><input type="submit" value="Sign Up"/></div>
+    </form>
+</div>
+<h2><a href="/login">login</a></h2>
+<div th:if="${errorMessage}" th:utext="${errorMessage}"
+
+</div>
+</body>
+</html>
