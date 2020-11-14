@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Add contact</title>
+</head>
+<body>
+<h2><a href="main">See all contact</a></h2>
+<div>
+    <h1>New contact:</h1>
+    <form th:action="@{/addContact}"
+          th:object="${contactForm}" method="POST"
+          enctype="multipart/form-data">
+        <p> Text:
+            <input type="text" th:field="*{text}"/>
+        </p>
+        <p> Tag:
+            <input type="text" th:field="*{tag}"/>
+        </p>
+
+        <input class="button-main-page" type="submit" value="Add"/>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+
+<body>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+
+
+
+<!--<h1>Contacts</h1>-->
+<!--<c:forEach items="${contact}" var="review">-->
+<!--    <div>-->
+<!--        <c:out value="${contact.text}"/><br/>-->
+<!--        <small><c:out value="${contact.tag}"/></small>-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--</c:forEach>-->
+
+
+
+<div class="container">
+    <table class="container" border="1">
+        <tr>
+            <th><h1>text</h1></th>
+            <th><h1>tag</h1></th>
+        </tr>
+        <tr th:each="document : ${contacts}">
+            <td th:utext="${document.text}">...</td>
+            <td th:utext="${document.tag}">...</td>
+        </tr>
+    </table>
+</div>
+
+
+<form method="post" th:action="@{/findContact}">
+    <input type="text" name="tag" placeholder="tag">
+    <button type="submit">Find</button>
+</form>
+
+<h2><a href="addContact">Add Contact</a></h2>
+
+
+
+</body>
+</html>
