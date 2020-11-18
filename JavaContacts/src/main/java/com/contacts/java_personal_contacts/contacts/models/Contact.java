@@ -1,9 +1,6 @@
 package com.contacts.java_personal_contacts.contacts.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Contact {
@@ -13,11 +10,30 @@ public class Contact {
     private String text;
     private String tag;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
+
     public Contact(){
     }
-    public Contact(String text, String tag) {
+
+    public Contact(String text, String tag, User name) {
         this.text = text;
         this.tag = tag;
+        this.author = name;
+    }
+
+
+    public String getAuthorName() {
+        return author != null ? author.getUsername() : "<none>";
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public Integer getId() {

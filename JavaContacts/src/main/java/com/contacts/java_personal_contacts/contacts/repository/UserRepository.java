@@ -1,6 +1,7 @@
 package com.contacts.java_personal_contacts.contacts.repository;
 
 import com.contacts.java_personal_contacts.contacts.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

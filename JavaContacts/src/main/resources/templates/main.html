@@ -9,6 +9,7 @@
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>
+<span><a href="/user">User List</a></span>
 
 
 
@@ -28,17 +29,23 @@
         <tr>
             <th><h1>text</h1></th>
             <th><h1>tag</h1></th>
+            <th><h1>author</h1></th>
         </tr>
-        <tr th:each="document : ${contacts}">
-            <td th:utext="${document.text}">...</td>
-            <td th:utext="${document.tag}">...</td>
+        <tr th:each="contact : ${contacts}">
+            <td th:utext="${contact.text}">...</td>
+            <td th:utext="${contact.tag}">...</td>
+            <td th:utext="${contact.author.getUsername()}">...</td>
         </tr>
     </table>
 </div>
 
-
-<form method="post" th:action="@{/findContact}">
-    <input type="text" name="tag" placeholder="tag">
+<!--th:action="@{/findContact}-->
+<!--<form method="post">-->
+<!--    <input type="text" name="tag" placeholder="tag">-->
+<!--    <button type="submit">Find</button>-->
+<!--</form>-->
+<form method="get" th:action="@{main}">
+    <input type="text" name="tag" placeholder="Tag">
     <button type="submit">Find</button>
 </form>
 

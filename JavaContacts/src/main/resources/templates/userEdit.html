@@ -1,0 +1,16 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add user</title>
+</head>
+<body>
+<div>
+    <h1>Edit user:</h1>
+    <form th:action="@{/user}" th:object="${user}" method="POST">
+        <input type="hidden" th:field="*{idUser}"/>
+        <p>UserName:<input type="text" th:field="*{username}"/></p>
+        <input class="button-main-page" type="submit" value="Edit"/>
+    </form>
+</div>
+</body>
