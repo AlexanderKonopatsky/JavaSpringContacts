@@ -3,6 +3,7 @@ package com.contacts.java_personal_contacts.contacts.forms;
 public class ContactForm {
     private String text;
     private String tag;
+    private String file;
 
     public ContactForm() {
     }
@@ -26,5 +27,13 @@ public class ContactForm {
     public ContactForm(String text, String tag) {
         this.text = text;
         this.tag = tag;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 }

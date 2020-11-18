@@ -9,6 +9,7 @@ public class Contact {
     private Integer id;
     private String text;
     private String tag;
+    private String filename;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -23,7 +24,6 @@ public class Contact {
         this.author = name;
     }
 
-
     public String getAuthorName() {
         return author != null ? author.getUsername() : "<none>";
     }
@@ -31,7 +31,6 @@ public class Contact {
     public User getAuthor() {
         return author;
     }
-
     public void setAuthor(User author) {
         this.author = author;
     }
@@ -39,7 +38,6 @@ public class Contact {
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -47,7 +45,6 @@ public class Contact {
     public String getText() {
         return text;
     }
-
     public void setText(String text) {
         this.text = text;
     }
@@ -55,14 +52,10 @@ public class Contact {
     public String getTag() {
         return tag;
     }
-
     public void setTag(String tag) {
         this.tag = tag;
     }
 
-
-
-
-
-
+    public String getFilename() { return filename; }
+    public void setFilename(String filename) { this.filename = filename; }
 }
