@@ -6,6 +6,7 @@ import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.ContactRepository;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @GetMapping("/")
     public ModelAndView greeting(Model model){
         ModelAndView modelAndView = new ModelAndView("greeting");
@@ -43,13 +47,15 @@ public class MainController {
 //    }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String tag, Model model) {
-        Iterable<Contact> contacts = contactRepository.findAll();
+    public String main(@RequestParam(required = false, defaultValue = "") String tag, Model model, Principal user) {
+        Iterable<Contact> contacts;
+        String currentPrincipalName = user.getName();
+        User currentUser = userRepository.findByUsername(currentPrincipalName);
 
         if (tag != null && !tag.isEmpty()) {
             contacts = contactRepository.findByTag(tag);
         } else {
-            contacts = contactRepository.findAll();
+            contacts = contactRepository.findByAuthor(currentUser);
         }
 
         model.addAttribute("contacts", contacts);
@@ -68,10 +74,31 @@ public class MainController {
 
 
     @PostMapping(value = "/addContact")
-    public ModelAndView addNewContact(Principal user, @RequestParam String text, @RequestParam String tag, Model model) {
+    public ModelAndView addNewContact(
+            Principal user,
+            @RequestParam String text,
+            @RequestParam String tag,
+            @RequestParam("file") MultipartFile file,
+            Model model) throws IOException {
         String currentPrincipalName = user.getName();
         User userFromDB = userRepository.findByUsername(currentPrincipalName);
         Contact contact = new Contact(text, tag, userFromDB);
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if(uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+            contact.setFilename(resultFileName);
+        }
+
         contactRepository.save(contact);
 
         ModelAndView modelAndView = new ModelAndView();
