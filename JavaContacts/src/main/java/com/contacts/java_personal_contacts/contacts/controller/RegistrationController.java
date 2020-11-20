@@ -45,6 +45,7 @@ public class RegistrationController {
         user.setUsername(userName);
         user.setPassword(password);
 
+        user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         model.addAttribute("errorMessage", "ERROR USER IS ALREADY EXIST");
         userRepository.save(user);

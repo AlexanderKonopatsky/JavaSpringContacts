@@ -38,24 +38,18 @@ public class MainController {
         return modelAndView;
     }
 
-//    @GetMapping("main")
-//    public ModelAndView getAllContact(Model model) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("main");
-//        model.addAttribute("contacts", contactRepository.findAll());
-//        return modelAndView;
-//    }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String tag, Model model, Principal user) {
+    public String main(
+            @RequestParam(required = false, defaultValue = "") String tag,
+            @AuthenticationPrincipal User user,
+            Model model) {
         Iterable<Contact> contacts;
-        String currentPrincipalName = user.getName();
-        User currentUser = userRepository.findByUsername(currentPrincipalName);
 
         if (tag != null && !tag.isEmpty()) {
             contacts = contactRepository.findByTag(tag);
         } else {
-            contacts = contactRepository.findByAuthor(currentUser);
+            contacts = contactRepository.findByAuthor(user);
         }
 
         model.addAttribute("contacts", contacts);
@@ -75,14 +69,13 @@ public class MainController {
 
     @PostMapping(value = "/addContact")
     public ModelAndView addNewContact(
-            Principal user,
+            @AuthenticationPrincipal User user,
             @RequestParam String text,
             @RequestParam String tag,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
-        String currentPrincipalName = user.getName();
-        User userFromDB = userRepository.findByUsername(currentPrincipalName);
-        Contact contact = new Contact(text, tag, userFromDB);
+
+        Contact contact = new Contact(text, tag, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -104,23 +97,8 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("main");
 
-        model.addAttribute("contacts", contactRepository.findAll());
+        model.addAttribute("contacts", contactRepository.findByAuthor(user));
         return modelAndView;
     }
-
-
-//    @PostMapping("filter")
-//    public ModelAndView filter(@RequestParam String tag, Model model) {
-//        Iterable<Contact> contacts;
-//        if (tag != null && !tag.isEmpty()) {
-//            contacts = contactRepository.findByTag(tag);
-//        } else {
-//            contacts = contactRepository.findAll();
-//        }
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("main");
-//        model.addAttribute("contacts", contacts);
-//        return modelAndView;
-//    }
 
 }
