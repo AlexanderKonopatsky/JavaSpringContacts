@@ -1,25 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <th:block th:include="fragments.html :: htmlHead"></th:block>
 </head>
 <body>
+<div th:replace="fragments.html :: header"></div>
+
+
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<div class="container">
-    <h1>Login:</h1>
+
+
+
+<h5 class="m-5">Login page</h5>
+<div class="container mt-5">
     <form th:action="@{/login}" method="post">
-        <br><div><label > User Name : <input placeholder="Enter username" type="text" name="username"/> </label></div><br>
-        <div><label> Password: <input placeholder="Enter password" type="password" name="password"/> </label></div><br>
-        <div><input type="submit" value="Sign In"/></div>
+        <div class="form-group">
+
+            <label class="col-sm-2 col-form-label" for="inputUsername">User name</label>
+            <div class="col-sm-5">
+                <input placeholder="Enter username" id="inputUsername"  class="form-control" type="text" name="username"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <label class="col-sm-2 col-form-label" for="inputPassword">Password</label>
+            <div class="col-sm-5">
+                <input placeholder="Enter password"  id="inputPassword" class="form-control" type="password" name="password"/>
+            </div>
+
+        </div>
+        <div>
+            <button  type="submit" class="btn btn-primary mt-4">Sign in</button>
+        </div>
     </form>
+
 </div>
-<h2><a href="/registration">Registration</a></h2>
+
+<h4 class="m-5"><a class="mt-6" href="/registration">Registration</a></h4>
+
+
+
+
+
 </body>
 </html>

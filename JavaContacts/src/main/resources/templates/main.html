@@ -1,49 +1,105 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
 <head>
-    <meta charset="UTF-8">
     <title>Main</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <th:block th:include="fragments.html :: htmlHead"></th:block>
 </head>
 
 <body>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
-<span><a href="/user">User List</a></span>
 
+<!--<div sec:authentication="name"></div>-->
+<!--<div sec:authentication="principal.authorities"></div>-->
+<!--<div sec:authorize ="hasAuthority('ADMIN')">-->
+<!--    <h1>This is admin</h1>-->
+<!--</div>-->
+<!--<span th:text="${#authentication.getPrincipal().getroles()}"></span>-->
+<!--<span th:text="${#authentication.getPrincipal().authorities}"></span>-->
+<!--<span th:text="${#authentication.getPrincipal().getRole()}"></span>-->
+
+
+<!--<span th:if="${#strings.contains(#authentication.principal.authorities,'ADMIN')}">aaa</span>-->
+<!--<span th:if="${#strings.contains(#authentication.principal.authorities,'USER')}">uuu</span>-->
+
+
+<div th:replace="fragments.html :: header"></div>
 
 
 
 
 <div class="container">
-    <table class="container" border="1">
-        <tr>
-            <th><h1>text</h1></th>
-            <th><h1>tag</h1></th>
-            <th><h1>author</h1></th>
-            <th><h1>Image</h1></th>
-        </tr>
-        <tr th:each="contact : ${contacts}">
-            <td th:utext="${contact.text}">...</td>
-            <td th:utext="${contact.tag}">...</td>
-            <td th:utext="${contact.author.getUsername()}">...</td>
-            <td>
-                <img  th:src="@{/img/{id}(id=${contact.filename})}" width="150" height="150"  alt="img"/>
-            </td>
-        </tr>
-    </table>
+
+
+    <div class="form-row mt-5">
+        <div class="form-group col-md-6">
+            <form method="get" th:action="@{main}" class="form-inline">
+                <input type="text" name="tag" placeholder="Search by tag" class="form-control">
+                <button type="submit" class="btn btn-primary ml-1">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:each="contact : ${contacts}" class="card my-4 shadow p-3 mb-5 bg-white rounded" style="max-width: 840px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img class="img-thumbnail " width="200"  th:src="@{/img/{id}(id=${contact.filename})}"  alt="img"/>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title" th:utext="${contact.text}">Card title</h5>
+                    <p class="card-text" th:utext="${contact.tag}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text" ><small class="text-muted" th:utext="${contact.author.getUsername()}" >Last updated 3 mins ago</small></p>
+                    <a href="#" class="card-link"><small class="text-muted" t>write</small></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 
-<form method="get" th:action="@{main}">
-    <input type="text" name="tag" placeholder="Tag">
-    <button type="submit">Find</button>
-</form>
+<!--<div class="container mt-3">-->
 
-<h2><a href="addContact">Add Contact</a></h2>
+<!--    <div th:each="contact : ${contacts}" class="card" style="width: 18rem;">-->
+<!--        <img class="card-img-top" th:src="@{/img/{id}(id=${contact.filename})}" width="150" height="150"  alt="img"/>-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title">Card title</h5>-->
+<!--            <td th:utext="${contact.text}">...</td>-->
+<!--        </div>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--            <li class="list-group-item" th:utext="${contact.tag}">Cras justo odio</li>-->
+<!--            <li class="list-group-item" th:utext="${contact.tag}">Dapibus ac facilisis in</li>-->
+<!--            <li class="list-group-item" th:utext="${contact.tag}">Vestibulum at eros</li>-->
+<!--        </ul>-->
+<!--        <div class="card-body">-->
+<!--            <a href="#" class="card-link">Card link</a>-->
+<!--            <a href="#" class="card-link">Another link</a>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
+<!--    <table class="container" border="1">-->
+<!--        <tr>-->
+<!--            <th><h1>text</h1></th>-->
+<!--            <th><h1>tag</h1></th>-->
+<!--            <th><h1>author</h1></th>-->
+<!--            <th><h1>Image</h1></th>-->
+<!--        </tr>-->
+<!--        <tr th:each="contact : ${contacts}">-->
+<!--            <td th:utext="${contact.text}">...</td>-->
+<!--            <td th:utext="${contact.tag}">...</td>-->
+<!--            <td th:utext="${contact.author.getUsername()}">...</td>-->
+<!--            <td>-->
+<!--                <img  th:src="@{/img/{id}(id=${contact.filename})}" width="150" height="150"  alt="img"/>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
+
+
+
+<!--    <h2><a href="addContact">Add Contact</a></h2>-->
+
+</div>
 
 </body>
 </html>
