@@ -44,10 +44,10 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-        user.setActive(true);
+        user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
-        userRepository.save(user);
+
 
         if( !org.apache.commons.lang3.StringUtils.isEmpty(user.getEmail())){
             String message = String.format(
@@ -57,6 +57,8 @@ public class UserService implements UserDetailsService {
             );
             mailSender.send(user.getEmail(), "Activation code", message);
         }
+
+        userRepository.save(user);
         return true;
     }
 
@@ -66,7 +68,7 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             return false;
         }
-
+        user.setActive(true);
         user.setActivationCode(null);
 
         userRepository.save(user);
