@@ -4,11 +4,14 @@ import com.contacts.java_personal_contacts.contacts.forms.UserForm;
 import com.contacts.java_personal_contacts.contacts.models.Role;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
+import com.contacts.java_personal_contacts.contacts.service.UserService;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +20,7 @@ import java.util.Collections;
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/registration")
     public ModelAndView showRegistrationPage(Model model) {
@@ -33,22 +36,32 @@ public class RegistrationController {
 
         String userName = userForm.getUsername();
         String password = userForm.getPassword();
+        String email = userForm.getEmail();
 
-        User userFromDB = userRepository.findByUsername(userName);
-        if(userFromDB != null){
-            model.addAttribute("errorMessage", "ERROR USER IS ALREADY EXIST");
-            modelAndView.setViewName("registration");
-            return modelAndView;
-        }
-        modelAndView.setViewName("login");
         User user = new User();
         user.setUsername(userName);
         user.setPassword(password);
+        user.setEmail(email);
 
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        model.addAttribute("errorMessage", "ERROR USER IS ALREADY EXIST");
-        userRepository.save(user);
+        if(!userService.addUser(user)){
+            model.addAttribute("errorMessage", "User exists!");
+            modelAndView.setViewName("registration");
+            return modelAndView;
+        }
+        model.addAttribute("message", "A confirmation letter has been sent to your mail!");
+        modelAndView.setViewName("login");
         return modelAndView;
+    }
+
+    @GetMapping("/activate/{code}")
+    public String activate(Model model, @PathVariable String code){
+        boolean isActivated = userService.activateUser(code);
+        if(isActivated) {
+            model.addAttribute("message", "User successfully activated");
+        } else {
+            model.addAttribute("message", "Activation code is not found");
+        }
+
+        return "login";
     }
 }

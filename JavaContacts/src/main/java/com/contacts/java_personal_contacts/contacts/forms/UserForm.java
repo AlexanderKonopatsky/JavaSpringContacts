@@ -8,12 +8,15 @@ public class UserForm {
 
     private boolean active;
 
+    private String email;
+
     public UserForm() {
     }
 
-    public UserForm(String username, String password, boolean active) {
+    public UserForm(String username, String password, boolean active, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -32,5 +35,11 @@ public class UserForm {
         this.password = password;
     }
 
+    public boolean isActive() { return active; }
 
+    public void setActive(boolean active) { this.active = active; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 }
