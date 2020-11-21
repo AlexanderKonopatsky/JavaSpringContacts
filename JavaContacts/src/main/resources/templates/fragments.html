@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:fragment="htmlHead">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,9 +33,9 @@
             </li>
             <li class="nav-item">
                 <div sec:authorize="isAuthenticated()">
-                <span th:if="${#strings.contains(#authentication.principal.authorities,'ADMIN')}">
-                    <a class="nav-link" href="/userList">User list</a>
-                </span>
+                    <span th:if="${#strings.contains(#authentication.principal.authorities,'ADMIN')}">
+                        <a class="nav-link" href="/userList">User list</a>
+                    </span>
                 </div>
             </li>
 
