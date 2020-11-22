@@ -12,26 +12,42 @@
     You have been logged out.
 </div>
 
-<!--<div th:replace="fragments.html :: header"></div>-->
-
+<div th:replace="fragments.html :: header"></div>
+<!--<div class="m-4" th:utext="${errValidate}"></div>-->
+<div th:with="validError=${errValidate}">
     <h5 class="m-5">Register page</h5>
     <div class="container mt-5">
         <form th:action="@{/registration}" th:object="${userForm}" method="post">
             <div class="form-group">
-                <label class="col-sm-2 col-form-label" for="inputUsername">User name</label>
+                <label class="col-sm-2 col-form-label" >User name</label>
                 <div class="col-sm-5">
-                    <input th:field="*{username}" placeholder="Enter username" id="inputUsername"  class="form-control" type="text" name="username"/>
+<!--                    <div th:if="${errValidate}">-->
+<!--                        <span th:if="${#strings.contains(validError,'Username')}">-->
+<!--                            <div class="m-4" th:utext="${errValidate}"></div>-->
+<!--                        </span>-->
+<!--                    </div>-->
+
+                    <div th:if="${errValidate}">
+                        <small class="text-danger ml-4" th:if="${#strings.contains(validError,'Username')}" >Please fill the username</small>
+                    </div>
+                    <input th:field="*{username}" placeholder="Enter username"   class="form-control" type="text" name="username"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-form-label" for="inputPassword">Password</label>
                 <div class="col-sm-5">
+                    <div th:if="${errValidate}">
+                        <small class="text-danger ml-4" th:if="${#strings.contains(validError,'Password')}">Please fill the Password</small>
+                    </div>
                     <input th:field="*{password}" placeholder="Enter password"  id="inputPassword" class="form-control" type="password" name="password"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-form-label" for="inputMail">Email</label>
                 <div class="col-sm-5">
+                    <div th:if="${errValidate}">
+                        <small class="text-danger ml-4" th:if="${#strings.contains(validError,'Email')}">Please fill the email</small>
+                    </div>
                     <input th:field="*{email}" placeholder="some@some.com"  id="inputMail" class="form-control" type="email" name="email"/>
                 </div>
             </div>

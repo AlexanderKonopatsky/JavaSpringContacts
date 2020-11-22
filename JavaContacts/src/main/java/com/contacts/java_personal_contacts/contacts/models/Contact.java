@@ -1,13 +1,20 @@
 package com.contacts.java_personal_contacts.contacts.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Contact {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
-    private String text;
+//    @NotBlank(message = "Please fill the name")
+    private String name;
+//    @Length(max = 2048, message = "Description too long")
+    private String description;
+//    @NotBlank
     private String tag;
     private String filename;
 
@@ -18,10 +25,11 @@ public class Contact {
     public Contact(){
     }
 
-    public Contact(String text, String tag, User name) {
-        this.text = text;
+    public Contact(String description, String tag, User author, String name) {
+        this.description = description;
         this.tag = tag;
-        this.author = name;
+        this.author = author;
+        this.name = name;
     }
 
     public String getAuthorName() {
@@ -42,12 +50,8 @@ public class Contact {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
-    }
-    public void setText(String text) {
-        this.text = text;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public String getTag() {
         return tag;
@@ -58,4 +62,7 @@ public class Contact {
 
     public String getFilename() { return filename; }
     public void setFilename(String filename) { this.filename = filename; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

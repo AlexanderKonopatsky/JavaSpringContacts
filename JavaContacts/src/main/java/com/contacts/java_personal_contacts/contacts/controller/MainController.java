@@ -11,15 +11,20 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.Message;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -71,12 +76,13 @@ public class MainController {
     @PostMapping(value = "/addContact")
     public ModelAndView addNewContact(
             @AuthenticationPrincipal User user,
-            @RequestParam String text,
+            @RequestParam String name,
             @RequestParam String tag,
+            @RequestParam String description,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
 
-        Contact contact = new Contact(text, tag, user);
+        Contact contact = new Contact(description, tag, user, name);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
