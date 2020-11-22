@@ -29,6 +29,7 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
 
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -100,5 +101,4 @@ public class MainController {
         model.addAttribute("contacts", contactRepository.findByAuthor(user));
         return modelAndView;
     }
-
 }

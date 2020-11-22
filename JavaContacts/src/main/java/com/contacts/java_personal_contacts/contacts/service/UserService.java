@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -22,16 +23,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private MailSender mailSender;
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//        user.getUsername();
-//        user.getPassword();
-//        if (user == null){
-//            throw new UsernameNotFoundException(username);
-//        }
-//        return userRepository.findByUsername(username);
-//    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
@@ -49,6 +40,14 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(UUID.randomUUID().toString());
 
 
+
+        sendMessage(user);
+
+        userRepository.save(user);
+        return true;
+    }
+
+    private void sendMessage(User user) {
         if( !org.apache.commons.lang3.StringUtils.isEmpty(user.getEmail())){
             String message = String.format(
               "Hello, %s! \n" +
@@ -57,9 +56,6 @@ public class UserService implements UserDetailsService {
             );
             mailSender.send(user.getEmail(), "Activation code", message);
         }
-
-        userRepository.save(user);
-        return true;
     }
 
     public boolean activateUser(String code) {
@@ -75,5 +71,29 @@ public class UserService implements UserDetailsService {
 
         return true;
 
+    }
+
+    public void updateProfile(User user, String password, String email) {
+        String userEmail = user.getEmail();
+
+        boolean isEmailChanged = ((email != null && !email.equals(userEmail)) ||
+                (userEmail != null && !userEmail.equals(email)));
+        if (isEmailChanged) {
+            user.setEmail(email);
+
+            if (!org.apache.commons.lang3.StringUtils.isEmpty(email)){
+                user.setActivationCode(UUID.randomUUID().toString());
+            }
+            if (!org.apache.commons.lang3.StringUtils.isEmpty(password)){
+                user.setPassword(password);
+            }
+
+            userRepository.save(user);
+
+            if (isEmailChanged){
+                sendMessage(user);
+            }
+
+        }
     }
 }
