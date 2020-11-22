@@ -46,10 +46,11 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title" th:utext="${contact.text}">Card title</h5>
-                    <p class="card-text" th:utext="${contact.tag}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text" ><small class="text-muted" th:utext="${contact.author.getUsername()}" >Last updated 3 mins ago</small></p>
-                    <a href="#" class="card-link"><small class="text-muted" t>write</small></a>
+                    Name: <h5 class="card-title"  th:utext="${contact.name}"></h5>
+                    Description: <p class="card-text" th:utext="${contact.description}"></p>
+                    Tag:<p class="card-text" th:utext="${contact.tag}"></p>
+                    Author:<p class="card-text" ><small class="text-muted" th:utext="${contact.author.getUsername()}" ></small></p>
+                    <a href="#" class="card-link"><small class="text-muted">write message</small></a>
                 </div>
             </div>
 
