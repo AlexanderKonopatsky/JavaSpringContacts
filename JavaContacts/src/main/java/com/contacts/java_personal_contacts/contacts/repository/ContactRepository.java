@@ -2,6 +2,8 @@ package com.contacts.java_personal_contacts.contacts.repository;
 
 import com.contacts.java_personal_contacts.contacts.models.Contact;
 import com.contacts.java_personal_contacts.contacts.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -9,8 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ContactRepository extends CrudRepository<Contact, Long> {
-
-    List<Contact> findByTag(String tag);
-    List<Contact> findByAuthor(User author);
-
+    Page<Contact> findByTag(String tag, Pageable pageable);
+    Page<Contact> findByAuthor(User author, Pageable pageable);
+    Page<Contact> findAll(Pageable pageable);
 }

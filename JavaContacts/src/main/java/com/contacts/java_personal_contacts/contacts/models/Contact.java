@@ -10,11 +10,10 @@ public class Contact {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
-//    @NotBlank(message = "Please fill the name")
+    @NotBlank(message = "Please fill the name")
     private String name;
-//    @Length(max = 2048, message = "Description too long")
+    @Length(max = 2048, message = "Description too long")
     private String description;
-//    @NotBlank
     private String tag;
     private String filename;
 

@@ -45,16 +45,14 @@ public class RegistrationController {
             @ModelAttribute("userForm") UserForm userForm) {
         ModelAndView modelAndView = new ModelAndView();
 
-
-
         String userName = userForm.getUsername();
         String password = userForm.getPassword();
         String email = userForm.getEmail();
 
-        User user2 = new User();
-        user.setUsername(userName);
-        user.setPassword(password);
-        user.setEmail(email);
+        User currUser = new User();
+        currUser.setUsername(userName);
+        currUser.setPassword(password);
+        currUser.setEmail(email);
 
         if (bindingResult.hasErrors()) {
             List<FieldError> errors = bindingResult.getFieldErrors();
@@ -67,7 +65,7 @@ public class RegistrationController {
             return modelAndView;
         }
 
-        if(!userService.addUser(user2)){
+        if(!userService.addUser(currUser)){
             model.addAttribute("errorMessage", "User exists!");
             modelAndView.setViewName("registration");
             return modelAndView;

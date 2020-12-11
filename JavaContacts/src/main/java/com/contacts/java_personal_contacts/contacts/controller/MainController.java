@@ -7,11 +7,15 @@ import com.contacts.java_personal_contacts.contacts.repository.ContactRepository
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,13 +23,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.Message;
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.IntStream;
 
 @Controller
 public class MainController {
@@ -49,16 +52,21 @@ public class MainController {
     public String main(
             @RequestParam(required = false, defaultValue = "") String tag,
             @AuthenticationPrincipal User user,
-            Model model) {
-        Iterable<Contact> contacts;
+            Model model,
+            //@RequestParam(value = "size", required = false, defaultValue = "0") Integer size,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
+            ) {
+        Page<Contact> contacts ;
+
 
         if (tag != null && !tag.isEmpty()) {
-            contacts = contactRepository.findByTag(tag);
+            contacts = contactRepository.findByTag(tag, PageRequest.of(page, 3));
         } else {
-            contacts = contactRepository.findByAuthor(user);
+            contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));
         }
 
         model.addAttribute("contacts", contacts);
+        model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
         model.addAttribute("filter", tag);
 
         return "main";
@@ -75,14 +83,26 @@ public class MainController {
 
     @PostMapping(value = "/addContact")
     public ModelAndView addNewContact(
+            @Valid Contact vcontact,
+            BindingResult bindingResult,
             @AuthenticationPrincipal User user,
             @RequestParam String name,
             @RequestParam String tag,
             @RequestParam String description,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
-
         Contact contact = new Contact(description, tag, user, name);
+
+//        if (bindingResult.hasErrors()) {
+//            List<FieldError> errors = bindingResult.getFieldErrors();
+//            List<String> message = new ArrayList<>();
+//            for (FieldError e : errors){
+//                message.add(e.getDefaultMessage());
+//            }
+//            model.addAttribute("errValidate", message);
+//            modelAndView.setViewName("registration");
+//            return modelAndView;
+//        }
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -104,7 +124,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("main");
 
-        model.addAttribute("contacts", contactRepository.findByAuthor(user));
+        //model.addAttribute("contacts", contactRepository.findByAuthor(user));
         return modelAndView;
     }
 }

@@ -27,7 +27,7 @@
 
 
 
-<div class="container">
+<div class="container ">
 
 
     <div class="form-row mt-5">
@@ -58,6 +58,30 @@
     </div>
 </div>
 
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-lg justify-content-center">
+        <li class="page-item" th:each="pageNumber : ${numbers}"
+        th:class="${pageNumber == contacts.number} ? active">
+            <a class="page-link" th:href="@{'/main?page=' + ${pageNumber}}" th:text="${pageNumber + 1}"></a>
+        </li>
+    </ul>
+</nav>
+
+
+<!--<div style="width: 20%;margin:0 auto;">-->
+<!--    <nav aria-label="..." >-->
+<!--        <ul class="pagination" style="display: flex;justify-content: center">-->
+<!--            <li class="page-item" id="previous" style="width: 100px">-->
+<!--                <a class="page-link" href="#" tabindex="-1" style="display: block;text-align: center" onclick="prev()">Previous</a>-->
+<!--            </li>-->
+
+<!--            <li class="page-item" id="next" style="margin-left: 30px; width: 100px">-->
+<!--                <a class="page-link" href="#" style="display: block;text-align: center" onclick="next()">Next</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
 
 <!--<div class="container mt-3">-->
 
@@ -95,7 +119,6 @@
 <!--            </td>-->
 <!--        </tr>-->
 <!--    </table>-->
-
 
 
 <!--    <h2><a href="addContact">Add Contact</a></h2>-->
