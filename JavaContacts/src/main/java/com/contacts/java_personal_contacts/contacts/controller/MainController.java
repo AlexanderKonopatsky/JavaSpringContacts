@@ -1,10 +1,12 @@
 package com.contacts.java_personal_contacts.contacts.controller;
 
 import com.contacts.java_personal_contacts.contacts.forms.ContactForm;
+import com.contacts.java_personal_contacts.contacts.forms.MessageForm;
 import com.contacts.java_personal_contacts.contacts.models.Contact;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.ContactRepository;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
+import com.contacts.java_personal_contacts.contacts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,8 @@ public class MainController {
     private ContactRepository contactRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
 
     @Value("${upload.path}")
@@ -89,11 +93,12 @@ public class MainController {
             @RequestParam String name,
             @RequestParam String tag,
             @RequestParam String description,
+            @RequestParam String email,
             @RequestParam("file") MultipartFile file,
             Model model,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) throws IOException {
-        Contact contact = new Contact(description, tag, user, name);
+        Contact contact = new Contact(description, tag, user, name, email);
 
 //        if (bindingResult.hasErrors()) {
 //            List<FieldError> errors = bindingResult.getFieldErrors();
@@ -130,4 +135,44 @@ public class MainController {
         model.addAttribute("contacts", contacts);
         return modelAndView;
     }
+
+    @GetMapping("sendMessage")
+    public ModelAndView showSendMessageForm(
+            Model model,
+            @RequestParam(required = false, defaultValue = "") String email
+    ) {
+        if (email != null && !email.isEmpty()) {
+            model.addAttribute("email", email);
+        }
+
+        ModelAndView modelAndView = new ModelAndView("sendMessage");
+        return modelAndView;
+    }
+
+
+
+    @PostMapping(value = "/sendMessage")
+    public ModelAndView sendNewMessage(
+            @Valid Contact vcontact,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal User user,
+            @RequestParam String to,
+            @RequestParam String subject,
+            @RequestParam String message,
+            Model model
+    ) throws IOException {
+
+        if (to != null && !to.isEmpty() && subject !=null && !subject.isEmpty() && message !=null  && !message.isEmpty()) {
+            userService.sendMessageToUser(to, subject, message);
+            model.addAttribute("result", "Success!");
+        }
+        else {
+            model.addAttribute("result", "Fail!");
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sendMessage");
+        return modelAndView;
+    }
+
+
 }

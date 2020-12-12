@@ -3,6 +3,7 @@ package com.contacts.java_personal_contacts.contacts.models;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -14,6 +15,8 @@ public class Contact {
     private String name;
     @Length(max = 2048, message = "Description too long")
     private String description;
+    @Email(message = "Email should be valid")
+    private String email;
     private String tag;
     private String filename;
 
@@ -24,11 +27,12 @@ public class Contact {
     public Contact(){
     }
 
-    public Contact(String description, String tag, User author, String name) {
+    public Contact(String description, String tag, User author, String name, String email) {
         this.description = description;
         this.tag = tag;
         this.author = author;
         this.name = name;
+        this.email = email;
     }
 
     public String getAuthorName() {
@@ -64,4 +68,7 @@ public class Contact {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }

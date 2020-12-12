@@ -98,4 +98,11 @@ public class UserService implements UserDetailsService {
 
         }
     }
+
+    public void sendMessageToUser( String to, String subject, String message) {
+
+            mailSender.send(to, subject, message);
+
+        }
+
 }

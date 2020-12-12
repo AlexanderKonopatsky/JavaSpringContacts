@@ -5,14 +5,16 @@ public class ContactForm {
     private String tag;
     private String file;
     private String name;
+    private String email;
 
     public ContactForm() {
     }
 
-    public ContactForm(String description, String tag, String name) {
+    public ContactForm(String description, String tag, String name, String email) {
         this.description = description;
         this.tag = tag;
         this.name = name;
+        this.email = email;
     }
 
     public String getDescription() { return description; }
@@ -34,4 +36,8 @@ public class ContactForm {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 }
