@@ -40,7 +40,7 @@
             <li class="nav-item">
                 <div sec:authorize="isAuthenticated()">
                     <span th:if="${#strings.contains(#authentication.principal.authorities,'ADMIN')}">
-                        <a class="nav-link" href="/userList">User list</a>
+                        <a class="nav-link" href="/user">User list</a>
                     </span>
                 </div>
             </li>
