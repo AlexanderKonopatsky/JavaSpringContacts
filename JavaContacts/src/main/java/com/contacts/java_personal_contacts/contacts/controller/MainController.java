@@ -90,7 +90,9 @@ public class MainController {
             @RequestParam String tag,
             @RequestParam String description,
             @RequestParam("file") MultipartFile file,
-            Model model) throws IOException {
+            Model model,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
+    ) throws IOException {
         Contact contact = new Contact(description, tag, user, name);
 
 //        if (bindingResult.hasErrors()) {
@@ -123,8 +125,9 @@ public class MainController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("main");
-
-        //model.addAttribute("contacts", contactRepository.findByAuthor(user));
+        Page<Contact> contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));
+        model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
+        model.addAttribute("contacts", contacts);
         return modelAndView;
     }
 }
