@@ -5,6 +5,7 @@ import com.contacts.java_personal_contacts.contacts.models.Role;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import com.contacts.java_personal_contacts.contacts.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class RegistrationController {
     @Autowired
@@ -72,6 +74,7 @@ public class RegistrationController {
         }
         model.addAttribute("message", "A confirmation letter has been sent to your mail!");
         modelAndView.setViewName("login");
+        log.info("register - user with username: ", userName);
         return modelAndView;
     }
 
@@ -80,8 +83,10 @@ public class RegistrationController {
         boolean isActivated = userService.activateUser(code);
         if(isActivated) {
             model.addAttribute("message", "User successfully activated");
+            log.info("User successfully activated, code: ", code);
         } else {
             model.addAttribute("message", "Activation code is not found");
+            log.info("Activation code is not found: ", code);
         }
 
         return "login";

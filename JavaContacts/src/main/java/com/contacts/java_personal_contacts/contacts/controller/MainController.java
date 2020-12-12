@@ -7,6 +7,8 @@ import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.ContactRepository;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import com.contacts.java_personal_contacts.contacts.service.UserService;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ import java.security.Principal;
 import java.util.*;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Controller
 public class MainController {
     @Autowired
@@ -50,7 +53,6 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView("greeting");
         return modelAndView;
     }
-
 
     @GetMapping("/main")
     public String main(
@@ -72,7 +74,6 @@ public class MainController {
         model.addAttribute("contacts", contacts);
         model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
         model.addAttribute("filter", tag);
-
         return "main";
     }
 
@@ -124,6 +125,7 @@ public class MainController {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
 
             contact.setFilename(resultFileName);
+            log.info("Image uploaded successfully");
         }
 
         contactRepository.save(contact);
@@ -133,6 +135,7 @@ public class MainController {
         Page<Contact> contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));
         model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
         model.addAttribute("contacts", contacts);
+        log.info("post request: /addContact");
         return modelAndView;
     }
 
@@ -144,7 +147,6 @@ public class MainController {
         if (email != null && !email.isEmpty()) {
             model.addAttribute("email", email);
         }
-
         ModelAndView modelAndView = new ModelAndView("sendMessage");
         return modelAndView;
     }
@@ -165,12 +167,15 @@ public class MainController {
         if (to != null && !to.isEmpty() && subject !=null && !subject.isEmpty() && message !=null  && !message.isEmpty()) {
             userService.sendMessageToUser(to, subject, message);
             model.addAttribute("result", "Success!");
+            log.info("sending a message to {} success", to);
         }
         else {
             model.addAttribute("result", "Fail!");
+            log.info("sending a message to {} fail", to);
         }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("sendMessage");
+        log.info("post request: /sendMessage");
         return modelAndView;
     }
 

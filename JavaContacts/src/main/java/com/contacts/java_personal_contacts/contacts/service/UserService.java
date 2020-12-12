@@ -5,6 +5,7 @@ import com.contacts.java_personal_contacts.contacts.forms.UserForm;
 import com.contacts.java_personal_contacts.contacts.models.Role;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Collections;
 import java.util.UUID;
-
+@Slf4j
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -42,10 +43,10 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-
         sendMessage(user);
 
         userRepository.save(user);
+        log.info("user with username: {} successfully added", user.getUsername());
         return true;
     }
 
@@ -58,6 +59,7 @@ public class UserService implements UserDetailsService {
             );
             mailSender.send(user.getEmail(), "Activation code", message);
         }
+        log.info("send activate message to user: {} successfully sent", user.getUsername());
     }
 
     public boolean activateUser(String code) {
@@ -70,9 +72,8 @@ public class UserService implements UserDetailsService {
         user.setActivationCode(null);
 
         userRepository.save(user);
-
+        log.info("the user {} followed the activation link: user {} activated", user.getUsername(), user.getUsername());
         return true;
-
     }
 
     public void updateProfile(User user, String password, String email) {
@@ -87,22 +88,19 @@ public class UserService implements UserDetailsService {
                 user.setActivationCode(UUID.randomUUID().toString());
             }
             if (!org.apache.commons.lang3.StringUtils.isEmpty(password)){
-                user.setPassword(password);
+                user.setPassword(passwordEncoder.encode(password));
             }
 
             userRepository.save(user);
 
             if (isEmailChanged){
-                sendMessage(user);
+                //sendMessage(user);
             }
-
         }
     }
 
     public void sendMessageToUser( String to, String subject, String message) {
-
             mailSender.send(to, subject, message);
-
-        }
-
+            log.info("user sent a message to {}", to);
+    }
 }
