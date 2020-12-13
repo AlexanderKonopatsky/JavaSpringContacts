@@ -1,6 +1,5 @@
 package com.contacts.java_personal_contacts.contacts.config;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

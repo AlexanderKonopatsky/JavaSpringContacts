@@ -6,8 +6,8 @@
 </head>
 <body>
 <div th:replace="fragments.html :: header"></div>
-<!--<p th:if="${#fields.hasErrors('tag')}">Name Error</p>-->
-<div class="container mt-5">Hello, quest</div>
-<div class="container mt-3">This is Java Spring application - PersonalContacts</div>
+
+<div class="container mt-5"> <p class="m-4" th:utext="'Hello, <b>' + ${user} + '</b>'"></p></div>
+<div class="container mt-3">This is Java Spring application - Personal Contacts</div>
 </body>
 </html>

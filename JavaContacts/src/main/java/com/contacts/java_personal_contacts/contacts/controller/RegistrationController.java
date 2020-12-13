@@ -1,12 +1,9 @@
 package com.contacts.java_personal_contacts.contacts.controller;
 
 import com.contacts.java_personal_contacts.contacts.forms.UserForm;
-import com.contacts.java_personal_contacts.contacts.models.Role;
 import com.contacts.java_personal_contacts.contacts.models.User;
-import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import com.contacts.java_personal_contacts.contacts.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j

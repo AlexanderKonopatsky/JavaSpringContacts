@@ -1,11 +1,8 @@
 package com.contacts.java_personal_contacts.contacts.models;
 
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
@@ -22,20 +19,6 @@ public class User implements UserDetails {
     private String password;
     @NotBlank(message = "Email cannot be empty")
     private String email;
-
-
-//    private Integer idUser;
-//    @NotBlank(message = "Username cannot be empty")
-//    private String username;
-//    @NotBlank(message = "Password cannot be empty")
-//    private String password;
-//    @Transient
-//    @NotBlank(message = "Password confirmation cannot be empty")
-//    private String password2;
-//    @Email(message = "Email is not correct")
-//    @NotBlank(message = "Email cannot be empty")
-//    private String email;
-
 
     private String activationCode;
     private boolean active;
@@ -91,9 +74,6 @@ public class User implements UserDetails {
     public String getActivationCode() { return activationCode; }
     public void setActivationCode(String activationCode) { this.activationCode = activationCode; }
 
-//    public String getPassword2() { return password2; }
-//    public void setPassword2(String password2) { this.password2 = password2; }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -114,6 +94,4 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
-
-
 }

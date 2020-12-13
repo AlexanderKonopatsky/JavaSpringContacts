@@ -19,6 +19,7 @@ public class Contact {
     private String email;
     private String tag;
     private String filename;
+    private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -27,12 +28,13 @@ public class Contact {
     public Contact(){
     }
 
-    public Contact(String description, String tag, User author, String name, String email) {
+    public Contact(String description, String tag, User author, String name, String email, String phone) {
         this.description = description;
         this.tag = tag;
         this.author = author;
         this.name = name;
         this.email = email;
+        this.phone = phone;
     }
 
     public String getAuthorName() {
@@ -71,4 +73,7 @@ public class Contact {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

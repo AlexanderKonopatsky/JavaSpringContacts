@@ -11,15 +11,6 @@
 
     <div th:replace="fragments.html :: header"></div>
 
-<!--    <div class="m-4">Edit user:</div>-->
-<!--    <form class="" th:action="@{/user}" th:object="${user}" method="POST">-->
-<!--        <input type="hidden" th:field="*{idUser}"/>-->
-<!--        <p>UserName:<input type="text" th:field="*{username}"/></p>-->
-<!--        <p>Email:<input type="text" th:field="*{email}"/></p>-->
-<!--        <input class="button-main-page" type="submit" value="Edit"/>-->
-<!--    </form>-->
-
-
     <div class="form-group mt-3">
         <h6 class="m-3">Edit user:</h6>
         <form  th:action="@{/user}"  th:object="${user}" method="POST">
@@ -40,9 +31,6 @@
             </div>
         </form>
     </div>
-
-
-
 
 </div>
 </body>

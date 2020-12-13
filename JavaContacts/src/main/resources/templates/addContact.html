@@ -7,17 +7,13 @@
 <body>
 
 <div th:replace="fragments.html :: header"></div>
-
 <div class="container">
-    <!--<div class="m-4" th:utext="${errValidate}"></div>-->
-<!--    <div th:with="validError=${errValidate}">-->
 
     <a class="btn btn-primary mt-4" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Add new contact
     </a>
 
     <div class="collapse" id="collapseExample">
-
         <div class="form-group mt-3">
             <h6 class="m-3">New contact:</h6>
             <form  th:action="@{/addContact}"  th:object="${contactForm}" method="POST" enctype="multipart/form-data">
@@ -30,6 +26,11 @@
                    <div  class="col-sm-5">
                        <input  placeholder="Description" class="form-control" type="text" th:field="*{description}"/>
                    </div>
+                </div>
+                <div class="form-group">
+                    <div  class="col-sm-5">
+                        <input  placeholder="Phone" class="form-control" type="text" th:field="*{phone}"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div  class="col-sm-5">
@@ -47,27 +48,13 @@
                         <input  type="file" name="file" th:field="*{file}"/>
                     </div>
                 </div>
-<!--                <div class="form-group">-->
-<!--                    <div  class="col-sm-4">-->
-<!--                        <div class="custom-file">-->
-<!--                            <input type="file" name="file" id="customFile" th:field="*{file}">-->
-<!--                            <label class="custom-file-label" for="customFile">Choose file</label>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Добавить</button>
                 </div>
             </form>
         </div>
-
     </div>
-
-
 </div>
-
-<!--<h2><a href="main">See all contact</a></h2>-->
 
 </body>
 </html>

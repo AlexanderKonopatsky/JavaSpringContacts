@@ -1,37 +1,27 @@
 package com.contacts.java_personal_contacts.contacts.controller;
 
 import com.contacts.java_personal_contacts.contacts.forms.ContactForm;
-import com.contacts.java_personal_contacts.contacts.forms.MessageForm;
 import com.contacts.java_personal_contacts.contacts.models.Contact;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.ContactRepository;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
 import com.contacts.java_personal_contacts.contacts.service.UserService;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.mail.Message;
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -41,17 +31,20 @@ public class MainController {
     @Autowired
     private ContactRepository contactRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
-
 
     @Value("${upload.path}")
     private String uploadPath;
 
     @GetMapping("/")
-    public ModelAndView greeting(Model model){
+    public ModelAndView greeting(Model model, @AuthenticationPrincipal User user){
         ModelAndView modelAndView = new ModelAndView("greeting");
+        if (user!= null) {
+            model.addAttribute("user", user.getUsername());
+        }
+        else {
+            model.addAttribute("user", "guest");
+        }
         return modelAndView;
     }
 
@@ -70,7 +63,6 @@ public class MainController {
         if (tag != null && !tag.isEmpty()) {
             contacts = contactRepository.findByTag(tag, PageRequest.of(page, 3));
         }
-
         if (name != null && !name.isEmpty()) {
             contacts = contactRepository.findByName(name, PageRequest.of(page, 3));
         }
@@ -89,7 +81,6 @@ public class MainController {
         return modelAndView;
     }
 
-
     @PostMapping(value = "/addContact")
     public ModelAndView addNewContact(
             @Valid Contact vcontact,
@@ -99,11 +90,12 @@ public class MainController {
             @RequestParam String tag,
             @RequestParam String description,
             @RequestParam String email,
+            @RequestParam String phone,
             @RequestParam("file") MultipartFile file,
             Model model,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) throws IOException {
-        Contact contact = new Contact(description, tag, user, name, email);
+        Contact contact = new Contact(description, tag, user, name, email, phone);
 
 //        if (bindingResult.hasErrors()) {
 //            List<FieldError> errors = bindingResult.getFieldErrors();
@@ -155,8 +147,6 @@ public class MainController {
         return modelAndView;
     }
 
-
-
     @PostMapping(value = "/sendMessage")
     public ModelAndView sendNewMessage(
             @Valid Contact vcontact,
@@ -183,7 +173,6 @@ public class MainController {
         return modelAndView;
     }
 
-
     @GetMapping("/changeContact")
     public String userMessges(
             Model model,
@@ -209,7 +198,6 @@ public class MainController {
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) throws IOException {
         Contact contact = contactRepository.findById(id);
-
 
         if (contact.getAuthorName().equals(currentUser.getUsername())) {
             if (!StringUtils.isEmpty(name)) {

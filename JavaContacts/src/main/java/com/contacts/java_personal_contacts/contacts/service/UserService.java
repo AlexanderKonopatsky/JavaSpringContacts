@@ -1,7 +1,5 @@
 package com.contacts.java_personal_contacts.contacts.service;
 
-import antlr.StringUtils;
-import com.contacts.java_personal_contacts.contacts.forms.UserForm;
 import com.contacts.java_personal_contacts.contacts.models.Role;
 import com.contacts.java_personal_contacts.contacts.models.User;
 import com.contacts.java_personal_contacts.contacts.repository.UserRepository;
@@ -12,10 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
 import java.util.Collections;
 import java.util.UUID;
+
 @Slf4j
 @Service
 public class UserService implements UserDetailsService {

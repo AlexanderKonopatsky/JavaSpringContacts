@@ -7,20 +7,10 @@
 <body>
 <div th:replace="fragments.html :: header"></div>
 
-
-<!--<div class="m-4" th:if="${param.error}">-->
-<!--    Invalid username and password.-->
-<!--</div>-->
-<!--<div class="m-4" th:if="${param.logout}">-->
-<!--    You have been logged out.-->
-<!--</div>-->
-
 <div class="m-4" th:utext="${message}"></div>
 
-<h5 class="m-5">Profile</h5>
+<h5 class="m-5">Change profile</h5>
 
-
-<!--<h5  th:utext="${message}"></h5>-->
 <div class="container mt-5">
     <form method="post" th:action="@{/user/profile}">
 
@@ -46,11 +36,6 @@
     </form>
 
 </div>
-
-
-
-
-
 
 </body>
 </html>

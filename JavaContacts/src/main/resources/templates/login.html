@@ -5,8 +5,8 @@
     <th:block th:include="fragments.html :: htmlHead"></th:block>
 </head>
 <body>
-<div th:replace="fragments.html :: header"></div>
 
+<div th:replace="fragments.html :: header"></div>
 
 <div class="m-4" th:if="${param.error}">
     Invalid username and password.
@@ -16,28 +16,21 @@
 </div>
 
 <div class="m-4" th:utext="${message}"></div>
-
 <h5 class="m-5">Login page</h5>
 
-
-<!--<h5  th:utext="${message}"></h5>-->
 <div class="container mt-5">
     <form th:action="@{/login}" method="post">
         <div class="form-group">
-
             <label class="col-sm-2 col-form-label" for="inputUsername">User name</label>
             <div class="col-sm-5">
                 <input placeholder="Enter username" id="inputUsername"  class="form-control" type="text" name="username"/>
             </div>
-
         </div>
         <div class="form-group">
-
             <label class="col-sm-2 col-form-label" for="inputPassword">Password</label>
             <div class="col-sm-5">
                 <input placeholder="Enter password"  id="inputPassword" class="form-control" type="password" name="password"/>
             </div>
-
         </div>
         <div>
             <button  type="submit" class="btn btn-primary mt-4">Sign in</button>
@@ -47,10 +40,6 @@
 </div>
 
 <h4 class="m-5"><a class="mt-6" href="/registration">Registration</a></h4>
-
-
-
-
 
 </body>
 </html>
