@@ -50,9 +50,10 @@
                     Description: <p class="card-text" th:utext="${contact.description}"></p>
                     Tag:<p class="card-text" th:utext="${contact.tag}"></p>
                     Email:<p class="card-text" th:utext="${contact.email}"></p>
-                    Author:<p class="card-text" ><small class="text-muted" th:utext="${contact.author.getUsername()}" ></small></p>
-                    <a th:href=@{/sendMessage(email=${contact.email})} class="card-link"><small class="text-muted">write message</small></a>
-
+<!--                    Author:<p class="card-text" ><small class="text-muted" th:utext="${contact.author.getUsername()}" ></small></p>-->
+                    <a th:href=@{/sendMessage(email=${contact.email})} class="card-link ">Write message</a>
+                    <a th:href=@{/changeContact(id=${contact.id})} class="card-link ">Edit</a>
+                    <a th:href=@{/changeContact(id=${contact.id})} class="card-link ">Delete</a>
                 </div>
             </div>
 

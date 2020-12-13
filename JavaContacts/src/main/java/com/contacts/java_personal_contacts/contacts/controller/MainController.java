@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -180,4 +181,80 @@ public class MainController {
     }
 
 
+    @GetMapping("/changeContact")
+    public String userMessges(
+            Model model,
+            @RequestParam(required = false) Integer id
+    ) {
+        Contact contact = contactRepository.findById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("contact", contact);
+
+        return "changeContact";
+    }
+
+    @PostMapping("/changeContact")
+    public ModelAndView updateMessage(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam Integer id,
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam String email,
+            @RequestParam String tag,
+            Model model,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
+    ) throws IOException {
+        Contact contact = contactRepository.findById(id);
+
+        log.info("getAuthor {}", contact.getAuthorName());
+        log.info("currentUser {}", currentUser.getUsername());
+        if (contact.getAuthorName().equals(currentUser.getUsername())) {
+            if (!StringUtils.isEmpty(name)) {
+                contact.setName(name);
+            }
+
+            if (!StringUtils.isEmpty(description)) {
+                contact.setDescription(description);
+            }
+
+            if (!StringUtils.isEmpty(email)) {
+                contact.setEmail(email);
+            }
+
+            if (!StringUtils.isEmpty(tag)) {
+                contact.setTag(tag);
+            }
+
+            if (file != null && !file.getOriginalFilename().isEmpty()) {
+                File uploadDir = new File(uploadPath);
+
+                if(uploadDir.exists()){
+                    uploadDir.mkdir();
+                }
+
+                String uuidFile = UUID.randomUUID().toString();
+                String resultFileName = uuidFile + "." + file.getOriginalFilename();
+
+                file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+                contact.setFilename(resultFileName);
+                log.info("Image uploaded successfully!");
+            }
+
+            contactRepository.save(contact);
+        }
+        else {
+
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("main");
+
+        Page<Contact> contacts ;
+        contacts = contactRepository.findByAuthor(currentUser, PageRequest.of(page, 3));
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
+
+        return modelAndView;
+    }
 }
