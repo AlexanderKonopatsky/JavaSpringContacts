@@ -58,18 +58,21 @@ public class MainController {
     @GetMapping("/main")
     public String main(
             @RequestParam(required = false, defaultValue = "") String tag,
+            @RequestParam(required = false, defaultValue = "") String name,
             @AuthenticationPrincipal User user,
             Model model,
             //@RequestParam(value = "size", required = false, defaultValue = "0") Integer size,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
             ) {
-        Page<Contact> contacts ;
 
+        Page<Contact> contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));;
 
         if (tag != null && !tag.isEmpty()) {
             contacts = contactRepository.findByTag(tag, PageRequest.of(page, 3));
-        } else {
-            contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));
+        }
+
+        if (name != null && !name.isEmpty()) {
+            contacts = contactRepository.findByName(name, PageRequest.of(page, 3));
         }
 
         model.addAttribute("contacts", contacts);

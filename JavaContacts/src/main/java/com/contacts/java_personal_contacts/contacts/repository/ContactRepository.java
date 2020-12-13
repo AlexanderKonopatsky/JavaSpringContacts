@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface ContactRepository extends CrudRepository<Contact, Long> {
     Page<Contact> findByTag(String tag, Pageable pageable);
+    Page<Contact> findByName(String name, Pageable pageable);
     Page<Contact> findByAuthor(User author, Pageable pageable);
     Page<Contact> findAll(Pageable pageable);
     Contact findById(Integer id);
