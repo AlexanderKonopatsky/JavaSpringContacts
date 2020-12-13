@@ -207,8 +207,7 @@ public class MainController {
     ) throws IOException {
         Contact contact = contactRepository.findById(id);
 
-        log.info("getAuthor {}", contact.getAuthorName());
-        log.info("currentUser {}", currentUser.getUsername());
+
         if (contact.getAuthorName().equals(currentUser.getUsername())) {
             if (!StringUtils.isEmpty(name)) {
                 contact.setName(name);
@@ -256,5 +255,18 @@ public class MainController {
         model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
 
         return modelAndView;
+    }
+
+    @PostMapping("/contact/{id}/remove")
+    public String deleteById(
+            Model model,
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable(value = "id") Integer id
+    ) {
+        Contact contact = contactRepository.findById(id);
+        if (contact.getAuthorName().equals(currentUser.getUsername())) {
+            contactRepository.delete(contact);
+        }
+        return "main";
     }
 }
