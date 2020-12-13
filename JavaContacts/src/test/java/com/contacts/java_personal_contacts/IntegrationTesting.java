@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class JavaPersonalContactsApplicationTests {
+public class IntegrationTesting {
 	@Autowired
 	private MockMvc mockMvc;
 
