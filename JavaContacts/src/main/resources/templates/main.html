@@ -57,17 +57,18 @@
 
 
 
-    <div th:each="contact : ${contacts}" class="card my-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 840px;">
+    <div th:each="contact : ${contacts}" class="card my-3 shadow p-4 mb-5 bg-white rounded" style="max-width: 840px;">
         <div class="row no-gutters">
             <div class="col-md-4 mt-4">
                 <img class="img-thumbnail " width="200"  th:src="@{/img/{id}(id=${contact.filename})}"  alt="img"/>
             </div>
             <div class="col-md-8">
                 <div class="card-body">
+
                     <p class="card-title"  th:utext="'<b>Name: </b>' + ${contact.name}"></p>
-                    <p class="card-text" th:utext="'<b>Description: </b>' + ${contact.description}"></p>
-                    <p class="card-text" th:utext="'<b>Tag: </b>' + ${contact.tag}"></p>
-                    <p class="card-text" th:utext="'<b>Email: </b>' +${contact.email}"></p>
+                    <p class="card-text" th:if="${contact.description != null}" th:utext="'<b>Description: </b>' + ${contact.description}"></p>
+                    <p class="card-text" th:if="${contact.tag != null}"  th:utext="'<b>Tag: </b>' + ${contact.tag}"></p>
+                    <p class="card-text" th:if="${contact.email != null}" th:utext="'<b>Email: </b>' +${contact.email}"></p>
                     <div class="row" style="text-align:right">
                         <div class="mr-3">
                             <a th:href=@{/sendMessage(email=${contact.email})} class="btn btn-info ">Write message</a>
