@@ -242,6 +242,7 @@ public class MainController {
             }
 
             contactRepository.save(contact);
+            log.info("contact with name {} is edited", contact.getAuthorName());
         }
         else {
 
@@ -261,12 +262,20 @@ public class MainController {
     public String deleteById(
             Model model,
             @AuthenticationPrincipal User currentUser,
-            @PathVariable(value = "id") Integer id
+            @PathVariable(value = "id") Integer id,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) {
         Contact contact = contactRepository.findById(id);
         if (contact.getAuthorName().equals(currentUser.getUsername())) {
             contactRepository.delete(contact);
+            log.info("contact with name {} is deleted", contact.getAuthorName());
         }
+
+        Page<Contact> contacts ;
+        contacts = contactRepository.findByAuthor(currentUser, PageRequest.of(page, 3));
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("numbers", IntStream.range(0, contacts.getTotalPages()).toArray());
+
         return "main";
     }
 }
