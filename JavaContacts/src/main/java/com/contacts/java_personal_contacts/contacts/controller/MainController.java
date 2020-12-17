@@ -61,10 +61,10 @@ public class MainController {
         Page<Contact> contacts = contactRepository.findByAuthor(user, PageRequest.of(page, 3));;
 
         if (tag != null && !tag.isEmpty()) {
-            contacts = contactRepository.findByTag(tag, PageRequest.of(page, 3));
+            contacts = contactRepository.findByTagAndAuthor(tag, user, PageRequest.of(page, 3));
         }
         if (name != null && !name.isEmpty()) {
-            contacts = contactRepository.findByName(name, PageRequest.of(page, 3));
+            contacts = contactRepository.findByNameAndAuthor(name, user, PageRequest.of(page, 3));
         }
 
         model.addAttribute("contacts", contacts);
@@ -158,7 +158,7 @@ public class MainController {
             Model model
     ) throws IOException {
 
-        if (to != null && !to.isEmpty() && subject !=null && !subject.isEmpty() && message !=null  && !message.isEmpty()) {
+        if (to != null && !to.isEmpty() && subject != null && !subject.isEmpty() && message !=null  && !message.isEmpty()) {
             userService.sendMessageToUser(to, subject, message);
             model.addAttribute("result", "Success!");
             log.info("sending a message to {} success", to);
@@ -193,6 +193,7 @@ public class MainController {
             @RequestParam String description,
             @RequestParam String email,
             @RequestParam String tag,
+            @RequestParam String phone,
             Model model,
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
@@ -214,6 +215,10 @@ public class MainController {
 
             if (!StringUtils.isEmpty(tag)) {
                 contact.setTag(tag);
+            }
+
+            if (!StringUtils.isEmpty(phone)) {
+                contact.setPhone(phone);
             }
 
             if (file != null && !file.getOriginalFilename().isEmpty()) {

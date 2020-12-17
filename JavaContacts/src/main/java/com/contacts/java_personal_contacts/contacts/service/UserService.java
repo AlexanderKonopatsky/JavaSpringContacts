@@ -78,7 +78,7 @@ public class UserService implements UserDetailsService {
 
         boolean isEmailChanged = ((email != null && !email.equals(userEmail)) ||
                 (userEmail != null && !userEmail.equals(email)));
-        if (isEmailChanged) {
+        //if (isEmailChanged) {
             user.setEmail(email);
 
             if (!org.apache.commons.lang3.StringUtils.isEmpty(email)){
@@ -91,9 +91,9 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
 
             if (isEmailChanged){
-                //sendMessage(user);
+               // sendMessage(user);
             }
-        }
+       // }
     }
 
     public void sendMessageToUser( String to, String subject, String message) {
